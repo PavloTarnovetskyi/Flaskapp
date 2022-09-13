@@ -12,7 +12,12 @@ pipeline {
         registry = "pavlotarnovetskyi/flaskapp_jenkins"
     }
     stages {
-        stage('Coning our Git '){
+         stage('CleanWorkspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        stage('Cloning our Git '){
             steps{
                 git 'https://github.com/PavloTarnovetskyi/Flaskapp.git'
             }
