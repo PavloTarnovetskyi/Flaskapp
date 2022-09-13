@@ -1,0 +1,19 @@
+---
+- name: Set up ec2 instance for Flaskapp
+  hosts: terraform_ubuntu
+  remote_user: ubuntu
+  become_method: sudo
+  become: yes
+  
+  tasks:
+
+  - name: move deploy script for Flaskapp on remote server  
+    ansible.builtin.copy:
+      src: /Users/pavlo/.jenkins/workspace/FlaskappFullSCM/Flaskapp_GitHub/ec2docker.sh
+      dest: /home/ubuntu
+      mode: '775'
+      owner: ubuntu
+      group: ubuntu
+
+  - name: setup docker and run Flaskapp
+    ansible.builtin.shell: "/home/ubuntu/ec2docker.sh"
