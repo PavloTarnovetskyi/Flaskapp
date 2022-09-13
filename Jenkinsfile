@@ -12,11 +12,11 @@ pipeline {
         registry = "pavlotarnovetskyi/flaskapp_jenkins"
     }
     stages {
-         stage('Clean Workspace') {
-            steps {
-                cleanWs()
-            }
-        }
+        // stage('Clean Workspace') {
+        //     steps {
+        //         cleanWs()
+        //     }
+        // }
         stage('Cloning our Git '){
             steps{
                 git 'https://github.com/PavloTarnovetskyi/Flaskapp.git'
