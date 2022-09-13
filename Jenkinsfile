@@ -1,55 +1,55 @@
 pipeline {
+
     agent any
+
     tools {
         dockerTool 'docker'
-        terraform 'terraform'
     }
+    
     environment{
-        dockerHubPwd   = credentials('dockerhub_pwd')
+        dockerImage = ''
+        registryCredential   = 'dockerhub-creds'
+        registry = "pavlotarnovetskyi/flaskapp_jenkins"
     }
     stages {
-        stage('Git clone'){
+        stage('Coning our Git '){
             steps{
-                git url: 'https://github.com/PavloTarnovetskyi/Onboarding.git', credentialsId: 'github', branch: 'master'
+                git 'https://github.com/PavloTarnovetskyi/Flaskapp.git'
             }
         }
-        stage('Build docker image') {
-            steps {
-                dir('./Flaskapp_GitHub'){
-                   sh """
-                    docker build -t pavlotarnovetskyi/flaskapp_jenkins .
-                    """
+        stage('Build & push docker image') {
+            steps {   
+                dir('./app&dockerfile'){ 
+                    script{
+                        dockerImage = docker.build registry
+                        docker.withRegistry('', registryCredential) {                    
+                        dockerImage.push()
+                        }                            
+                    }
                 }
-            } 
-            
+            }            
         }
-        stage('Push docker image to dockerhub & remove image') {
-            steps {
-                withCredentials([string(credentialsId: 'dockerhub_pwd', variable: 'password_dockerhub')]){
-                    sh "docker login -u pavlotarnovetskyi -p ${env.dockerHubPwd}"
-                    sh '''
-                        docker push pavlotarnovetskyi/flaskapp_jenkins
-                        docker rmi pavlotarnovetskyi/flaskapp_jenkins
-                    ''' 
-                }
-            
-            } 
-        }
+        
+        stage('Cleaning up') {
+            steps { 
+                sh "docker rmi $registry"
+            }
+        } 
+
         stage('Create EC2 ubuntu instance on AWS with terraform'){
-            steps{
-              dir('./Flaskapp_GitHub'){
+            steps{              
                    sh """
                     terraform init
                     terraform apply -auto-approve                    
                     """
                 }
-            }
+            
         }
         stage('Ansible connect and deploy Flaskapp'){
             steps{
-              dir('./Flaskapp_GitHub/ansible'){
+                dir('./ansible'){
                    sh """
-                     ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook playbook.yml                  
+                     ansible-playbook playbook.yml                  
                     """
                 }
             }

@@ -6,10 +6,13 @@
   become: yes
   
   tasks:
+  - name: Connectivity test to EC2 instance
+    ansible.builtin.ping:
+      data: ping 
 
   - name: move deploy script for Flaskapp on remote server  
     ansible.builtin.copy:
-      src: /Users/pavlo/.jenkins/workspace/FlaskappFullSCM/Flaskapp_GitHub/ec2docker.sh
+      src: ../ec2docker.sh
       dest: /home/ubuntu
       mode: '775'
       owner: ubuntu
