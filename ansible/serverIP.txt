@@ -1,2 +1,0 @@
-    [terraform_ubuntu]
-    13.53.45.182
