@@ -12,7 +12,7 @@ pipeline {
         registry = "pavlotarnovetskyi/flaskapp_jenkins"
     }
     stages {
-         stage('CleanWorkspace') {
+         stage('Clean Workspace') {
             steps {
                 cleanWs()
             }
