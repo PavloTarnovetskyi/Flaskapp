@@ -53,7 +53,7 @@ pipeline {
         stage('Ansible connect and deploy Flaskapp'){
             steps{
                 dir('./ansible'){
-                    retry(5) {
+                    retry(10) {
                          sh """
                         ansible-playbook playbook.yml                  
                         """
