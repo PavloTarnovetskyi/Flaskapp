@@ -10,45 +10,18 @@
     ansible.builtin.ping:
       data: ping 
 
-  - name: Install dependencies for pip3
-    apt:
-      update_cache: yes
-      name: "{{ item }}"
-    with_items:
-      - python3-distutils
-      - python3-dev
-      - python3-setuptools
-      - python3-wheel
-    become: yes
-      
-  - name: Install pip3
-    apt:
-      update_cache: yes
-      name: python3-pip
-    become: yes
-
-  - name: Install python docker sdk
+  - name: Install docker and run flaskapp.
     shell: |
-      pip3 install docker
-    become: yes
-
-  - name: Install docker
-    apt:
-      name: docker.io
-    become: yes
-
-  - name: Start Docker
-    shell: |
-      systemctl start docker
-      systemctl enable docker
-    become: yes
-
-  - name: Add remote user to docker group
-    user:
-      name: "ubuntu"
-      group: "docker"
-    append: yes
-
-  - name: Run image
-    shell: docker run --name flaskapp_jenkins -p 5000:5000 -d pavlotarnovetskyi/flaskapp_jenkins
+      sudo apt update
+      sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+      sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+      sudo apt update
+      sudo apt-get install docker-ce -y
+      sudo systemctl start docker
+      sudo systemctl enable docker
+      sudo groupadd docker
+      sudo usermod -aG docker ubuntu
+      sudo docker pull pavlotarnovetskyi/flaskapp_jenkins
+      sudo docker run --name flaskapp_jenkins -p 5000:5000 -d pavlotarnovetskyi/flaskapp_jenkins
     become: yes
