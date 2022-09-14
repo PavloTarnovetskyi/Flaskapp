@@ -53,9 +53,11 @@ pipeline {
         stage('Ansible connect and deploy Flaskapp'){
             steps{
                 dir('./ansible'){
-                   sh """
-                     ansible-playbook playbook.yml                  
-                    """
+                    timeout(time: 30 , unit: 'SECONDS') {
+                         sh """
+                        ansible-playbook playbook.yml                  
+                        """
+                    }    
                 }
             }
         }
