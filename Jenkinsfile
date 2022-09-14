@@ -55,7 +55,7 @@ pipeline {
                 dir('./ansible'){
                     retry(10) {
                          sh """
-                        ansible-playbook playbook.yml                  
+                             ansible-playbook playbook.yml                  
                         """
                     }    
                 }
