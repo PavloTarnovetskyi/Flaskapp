@@ -5,65 +5,50 @@
   become_method: sudo
   become: yes
   
-  vars:    
-    default_container_name: flaskapp_jenkins
-    default_container_image: pavlotarnovetskyi/flaskapp_jenkins
-    
-
   tasks:
   - name: Connectivity test to EC2 instance
     ansible.builtin.ping:
       data: ping 
-  - name: Install aptitude
-      apt:
-        name: aptitude
-        state: latest
-        update_cache: true
 
-    - name: Install required system packages
-      apt:
-        pkg:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - software-properties-common
-          - python3-pip
-          - virtualenv
-          - python3-setuptools
-        state: latest
-        update_cache: true
-
-    - name: Add Docker GPG apt Key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Add Docker Repository
-      apt_repository:
-        repo: deb https://download.docker.com/linux/ubuntu focal stable
-        state: present
-
-    - name: Update apt and install docker-ce
-      apt:
-        name: docker-ce
-        state: latest
-        update_cache: true
-
-    - name: Install Docker Module for Python
-      pip:
-        name: docker
-
-    - name: Pull default Docker image
-      community.docker.docker_image:
-        name: "{{ default_container_image }}"
-        source: pull
-
-    - name: Create default containers
-      community.docker.docker_container:
-        name: "{{ default_container_name }}"
-        image: "{{ default_container_image }}"        
-        state: present
-        ports:
-         - "5000:5000"
+  - name: Install dependencies for pip3
+    apt:
+      update_cache: yes
+      name: "{{ item }}"
+    with_items:
+      - python3-distutils
+      - python3-dev
+      - python3-setuptools
+      - python3-wheel
+    become: yes
       
- 
+  - name: Install pip3
+    apt:
+      update_cache: yes
+      name: python3-pip
+    become: yes
+
+  - name: Install python docker sdk
+    shell: |
+      pip3 install docker
+    become: yes
+
+  - name: Install docker
+    apt:
+      name: docker.io
+    become: yes
+
+  - name: Start Docker
+    shell: |
+      systemctl start docker
+      systemctl enable docker
+    become: yes
+
+  - name: Add remote "ubuntu" user to "docker" group
+    user:
+      name: "ubuntu"
+      group: "docker"
+    append: yes
+
+  - name: Run image
+    shell: docker run --name flaskapp_jenkins -p 5000:5000 -d pavlotarnovetskyi/flaskapp_jenkins
+    become: yes
