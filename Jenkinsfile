@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Cloning our Git '){
             steps{
-                git 'https://github.com/PavloTarnovetskyi/Flaskapp.git'
+                git 'https://github.com/PavloTarnovetskyi/Flaskapp.git -b pavlo'
             }
         }
         stage('Build & push docker image') {
