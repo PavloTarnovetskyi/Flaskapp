@@ -2,7 +2,7 @@ What is this change?
 
 
 
-Why is this important?
+**Why is this important?**
 
 
 
