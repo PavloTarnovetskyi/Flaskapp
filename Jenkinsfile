@@ -12,7 +12,7 @@ pipeline {
         registry = "pavlotarnovetskyi/flaskapp_jenkins"
     }
     stages {
-         stage('Clean Workspace') {
+        stage('Clean Workspace') {
             steps {
                 cleanWs()
             }
@@ -53,9 +53,11 @@ pipeline {
         stage('Ansible connect and deploy Flaskapp'){
             steps{
                 dir('./ansible'){
-                   sh """
-                     ansible-playbook playbook.yml                  
-                    """
+                    retry(10) {
+                         sh """
+                             ansible-playbook playbook.yml                  
+                           """
+                    }    
                 }
             }
         }
