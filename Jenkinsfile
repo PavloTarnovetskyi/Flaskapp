@@ -56,7 +56,7 @@ pipeline {
                     retry(10) {
                          sh """
                              ansible-playbook playbook.yml                  
-                        """
+                               """
                     }    
                 }
             }
