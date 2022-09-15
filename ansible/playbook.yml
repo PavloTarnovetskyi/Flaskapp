@@ -10,18 +10,33 @@
     ansible.builtin.ping:
       data: ping 
 
-  - name: Install docker and run flaskapp.
+  - name: Update apt-get repo and cache
+    apt: update_cache=yes force_apt_get=yes cache_valid_time=3600  
+
+  - name: Install prerequisites for Docker repository
+    apt:
+      name: ['apt-transport-https', 'ca-certificates', 'curl', 'gnupg2', 'software-properties-common']
+      update_cache: yes
+
+  - name: Add Docker GPG key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+
+  - name: Add Docker APT repository
+    apt_repository:
+      repo: deb [arch=amd64] https://download.docker.com/{{ ansible_system | lower }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+
+  - name: Install Docker CE
+    apt:
+      name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+      update_cache: yes
+      
+  - name: Start Docker
     shell: |
-      sudo apt update
-      sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
-      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-      sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
-      sudo apt update
-      sudo apt-get install docker-ce -y
-      sudo systemctl start docker
-      sudo systemctl enable docker
-      sudo groupadd docker
-      sudo usermod -aG docker ubuntu
-      sudo docker pull pavlotarnovetskyi/flaskapp_jenkins
-      sudo docker run --name flaskapp_jenkins -p 5000:5000 -d pavlotarnovetskyi/flaskapp_jenkins
+      systemctl start docker
+      systemctl enable docker
+    become: yes
+
+  - name: Run image
+    shell: docker run --name flaskapp_jenkins -d -p 5000:5000  -d pavlotarnovetskyi/flaskapp_jenkins
     become: yes
