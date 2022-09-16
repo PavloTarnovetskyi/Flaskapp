@@ -44,15 +44,4 @@ with Diagram("Flaskapp_diagrama", show=True, graph_attr=graph_attr):
     ansible >> Edge(label="7. set up remote EC2 instance; install & run commands")>>docker_2
     docker_2 >> Edge(label="8. pull image")<<dockerhub
     docker_2>> Edge(label="9. run docker container with app")>>app
-    user >> Edge(label="10. access app  http:<serverIP:5000>")>>app
-  
-
-    
-    
-    
-   
-    
-   
-
-
-        
+    user >> Edge(label="10. access app  http:<serverIP:5000>")>>app        
