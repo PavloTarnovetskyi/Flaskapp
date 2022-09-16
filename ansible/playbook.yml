@@ -9,46 +9,55 @@
   - name: Connectivity test to EC2 instance
     ansible.builtin.ping:
       data: ping 
-
-  - name: Install dependencies for pip3
+  - name: Install aptitude
     apt:
+      name: aptitude
+      state: latest
+      update_cache: true
+
+  - name: Install required system packages
+    apt:
+      pkg:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+        - python3-pip
+        - virtualenv
+        - python3-setuptools
+      state: latest
+      update_cache: true
+
+  - name: Add Docker GPG key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+
+  - name: Add Docker APT repository
+    apt_repository:
+      repo: deb [arch=amd64] https://download.docker.com/{{ ansible_system | lower }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+
+  - name: Install Docker CE
+    apt:
+      name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
       update_cache: yes
-      name: "{{ item }}"
-    with_items:
-      - python3-distutils
-      - python3-dev
-      - python3-setuptools
-      - python3-wheel
-    become: yes
-      
-  - name: Install pip3
-    apt:
-      update_cache: yes
-      name: python3-pip
-    become: yes
+  
+  - name: Install Docker Module for Python
+    pip:
+      name: docker
 
-  - name: Install python docker sdk
-    shell: |
-      pip3 install docker
-    become: yes
+  - name: Pull  Docker image
+    community.docker.docker_image:
+      name: pavlotarnovetskyi/flaskapp_jenkins
+      source: pull
 
-  - name: Install docker
-    apt:
-      name: docker.io
-    become: yes
+  - name: Create docker container
+    community.docker.docker_container:
+      name: flaskapp_jenkins
+      image: pavlotarnovetskyi/flaskapp_jenkins
+      ports:
+       - 5000:5000
+    
 
-  - name: Start Docker
-    shell: |
-      systemctl start docker
-      systemctl enable docker
-    become: yes
 
-  - name: Add remote user to docker group
-    user:
-      name: "ubuntu"
-      group: "docker"
-    append: yes
 
-  - name: Run image
-    shell: docker run --name flaskapp_jenkins -p 5000:5000 -d pavlotarnovetskyi/flaskapp_jenkins
-    become: yes
+ 
