@@ -12,14 +12,9 @@ pipeline {
         registry = "pavlotarnovetskyi/flaskapp_jenkins"
     }
     stages {
-        stage('Clean Workspace') {
-            steps {
-                cleanWs()
-            }
-        }
         stage('Cloning our Git '){
             steps{
-                git branch: 'pavlo', url: 'https://github.com/PavloTarnovetskyi/Flaskapp.git '
+                git 'https://github.com/PavloTarnovetskyi/Flaskapp.git'
             }
         }
         stage('Build & push docker image') {
@@ -34,7 +29,6 @@ pipeline {
                 }
             }            
         }
-        
         stage('Cleaning up') {
             steps { 
                 sh "docker rmi $registry"
@@ -43,11 +37,11 @@ pipeline {
 
         stage('Create EC2 ubuntu instance on AWS with terraform'){
             steps{              
-                   sh """
-                    terraform init
-                    terraform apply -auto-approve                    
-                    """
-                }
+                sh """
+                terraform init
+                terraform apply -auto-approve                    
+                      """
+            }
             
         }
         stage('Ansible connect and deploy Flaskapp'){
@@ -56,11 +50,10 @@ pipeline {
                     retry(10) {
                          sh """
                              ansible-playbook playbook.yml                  
-                           """
+                                """
                     }    
                 }
             }
-        }
-    
+        }            
     }
 }
