@@ -8,7 +8,7 @@ body {
    * Formatting the header area
    */
   header {
-    background-color: #DFB887;
+    background-color: #e9ae66;
     height: 35px;
     width: 100%;
     opacity: .9;
@@ -16,8 +16,9 @@ body {
   }
 
   header h1.logo:hover {
-    color: #fff;
+    color: rgb(132, 192, 212);
     text-decoration: none;
+    text-align: center;
   }
   /*
    * Centering the body content
@@ -25,7 +26,8 @@ body {
   .container {
     width: 1200px;
     margin: 0 auto;
-    background-color: #e6f9fa;
+    background-color: #54e3ea;
+    text-align: center;
   }
   div.home {
     padding: 10px 0 30px 0;
@@ -38,15 +40,16 @@ body {
   h2 {
     font-size: 3em;
     margin-top: 40px;
+    margin-left: 45px;
     text-align: center;
-    letter-spacing: -2px;
+    letter-spacing: 5px;
   }
   h3 {
     font-size: 1.7em;
     font-weight: 100;
     margin-top: 30px;
     text-align: center;
-    letter-spacing: -1px;
+    letter-spacing: 2px;
     color: #999;
   }
   .menu {
@@ -65,7 +68,11 @@ body {
   }
   .exrates{
     float: right;
-    margin-top: 6px;
-    right: -176px;
- 
+    margin-top: 0px;
+  
   }
+  .diagrama{
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+ }

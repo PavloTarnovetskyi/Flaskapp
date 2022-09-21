@@ -1,0 +1,21 @@
+{% extends 'base.jinja2' %}
+
+
+{% block content %}
+
+    <h1>Hello, everyone!</h1>
+    <p>Here you can find app depploying diagrama!</p>
+    <br>
+    <br>
+    
+    <p>On this diagram you can see how to deploy flask app on remote server. 
+        In this case I use AWS EC2 instance as remote server. 
+        As public repo with app and all necessary files, 
+        I use github, as orchistrator - Jenkins, 
+        for creating infrastructure on AWS - Terraform, to set up infrastructure - Ansible, 
+        app run in docker container.!</p>
+    
+    <img class="diagrama" src="/static/img/flaskapp_diagrama.png"
+         alt="appdeploying diagrama">
+  
+{% endblock %}

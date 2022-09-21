@@ -1,6 +1,6 @@
 # Task: Build a simple application that gets data from open source API and visualize it by simple page.
 import requests
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 
 app = Flask(__name__)
 
@@ -30,11 +30,11 @@ def home():
     return render_template("home.jinja2", currency_definition=currency_definition, currency=currency) 
 
 
-@app.route('/diagrama/')
+@app.route('/diagrama/', methods=['GET', 'POST'])
 def diagrama():
-    return f"Hello everyone!"
-    return render_template("diagrama.jinga2")
+    return render_template('diagrama.html')
     
+
 
 # To start the server, and allow the flask receive connection.
 if __name__ == '__main__':
