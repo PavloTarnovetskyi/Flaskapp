@@ -25,7 +25,7 @@ def home():
     return render_template("home.jinja2", currency_definition=currency_definition, currency=currency) 
 
 
-@app.route('/diagrama/', methods=['GET', 'POST'])
+@app.route('/diagram', methods=['GET', 'POST'])
 def diagrama():
     return render_template('diagrama.html')
     
