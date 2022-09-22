@@ -13,7 +13,7 @@ graph_attr = {
     "fontsize":"30"
 }
 
-with Diagram("Flaskapp_diagrama", show=True, graph_attr=graph_attr):
+with Diagram("Flaskapp_diagram", show=False, graph_attr=graph_attr):
     
     github = Github("Github repository", fontsize="20")
     user = Custom("User", "./png/user.png")

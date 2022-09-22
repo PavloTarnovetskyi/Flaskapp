@@ -6,9 +6,11 @@ app = Flask(__name__)
 
 load_dotenv()
 
+ENDPOINT = "https://openexchangerates.org/api/latest.json"
+CURRENCY_DEF_ENDPOINT = "https://openexchangerates.org/api/currencies.json"
 
-exchange_rates = requests.get(f"{os.getenv('ENDPOINT')}?app_id={os.getenv('APP_ID')}").json()["rates"]
-currency_definition = requests.get(f"{ os.getenv('CURRENCY_DEF_ENDPOINT')}").json()
+exchange_rates = requests.get(f"{ENDPOINT}?app_id={os.getenv('APP_ID')}").json()["rates"]
+currency_definition = requests.get(f"{CURRENCY_DEF_ENDPOINT}").json()
 
 
 # define the  URL on application
@@ -25,9 +27,9 @@ def home():
     return render_template("home.jinja2", currency_definition=currency_definition, currency=currency) 
 
 
-@app.route('/diagram', methods=['GET', 'POST'])
+@app.route('/diagram/', methods=['GET', 'POST'])
 def diagram():
-    return render_template('diagrama.html')
+    return render_template('diagram.html')
     
 
 
