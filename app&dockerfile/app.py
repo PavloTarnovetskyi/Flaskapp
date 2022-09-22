@@ -26,7 +26,7 @@ def home():
 
 
 @app.route('/diagram', methods=['GET', 'POST'])
-def diagrama():
+def diagram():
     return render_template('diagrama.html')
     
 
