@@ -1,15 +1,17 @@
 # Task: Build a simple application that gets data from open source API and visualize it by simple page.
-import requests, os
+import requests, boto3
 from flask import Flask, render_template, request
-from dotenv import load_dotenv
+
 app = Flask(__name__)
 
-load_dotenv()
+ssm = boto3.client('ssm')
+APP_ID = ssm.get_parameter(Name='APP_ID')['Parameter']['Value']
+
 
 ENDPOINT = "https://openexchangerates.org/api/latest.json"
 CURRENCY_DEF_ENDPOINT = "https://openexchangerates.org/api/currencies.json"
 
-exchange_rates = requests.get(f"{ENDPOINT}?app_id={os.getenv('APP_ID')}").json()["rates"]
+exchange_rates = requests.get(f"{ENDPOINT}?app_id={APP_ID}").json()["rates"]
 currency_definition = requests.get(f"{CURRENCY_DEF_ENDPOINT}").json()
 
 
@@ -29,7 +31,7 @@ def home():
 
 @app.route('/diagram/', methods=['GET', 'POST'])
 def diagram():
-    return render_template('diagram.html')
+    return render_template('diagram.jinja2')
     
 
 
