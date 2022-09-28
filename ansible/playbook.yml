@@ -56,6 +56,7 @@
       image: pavlotarnovetskyi/flaskapp_jenkins
       ports:
        - 5000:5000
+       - 9100:9100
     
 
 
