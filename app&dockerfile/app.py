@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 metrics = PrometheusMetrics(app)
-metrics.start_http_server(9190, host="0.0.0.0")
+metrics.start_http_server(9100, host="0.0.0.0")
 
 
 ssm = boto3.client('ssm', region_name='eu-north-1')
