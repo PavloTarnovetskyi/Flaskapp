@@ -36,11 +36,13 @@ pipeline {
         } 
 
         stage('Create EC2 ubuntu instance on AWS with terraform'){
-            steps{              
-                sh """
-                terraform init
-                terraform apply -auto-approve                    
-                      """
+            steps{   
+                dir('./terraform'){            
+                    sh """
+                    terraform init
+                    terraform apply -auto-approve                    
+                        """
+                }        
             }
             
         }
