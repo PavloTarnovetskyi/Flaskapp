@@ -1,11 +1,19 @@
 # Task: Build a simple application that gets data from open source API and visualize it by simple page.
 import requests, boto3
 from flask import Flask, render_template, request
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
 
-ssm = boto3.client('ssm')
+
+metrics = PrometheusMetrics(app)
+metrics.start_http_server(9190, host="0.0.0.0")
+
+
+ssm = boto3.client('ssm', region_name='eu-north-1')
+  
 APP_ID = ssm.get_parameter(Name='APP_ID')['Parameter']['Value']
+
 
 
 ENDPOINT = "https://openexchangerates.org/api/latest.json"
