@@ -45,20 +45,26 @@
     pip:
       name: docker
 
-  - name: Pull  Docker image
+  - name: Pull  Docker image with app
     community.docker.docker_image:
       name: pavlotarnovetskyi/flaskapp_jenkins
       source: pull
 
-  - name: Create docker container
+  - name: Create docker container with app
     community.docker.docker_container:
       name: flaskapp_jenkins
       image: pavlotarnovetskyi/flaskapp_jenkins
       ports:
        - 5000:5000
-       - 9100:9100
-    
+      
+  - name: Pull  Docker image with node-exporter
+    community.docker.docker_image:
+      name: prom/node-exporter
+      source: pull
 
-
-
- 
+  - name: Create docker container
+    community.docker.docker_container:
+      name: node-exporter
+      image: prom/node-exporter
+      ports:
+      - 9100:9100     
