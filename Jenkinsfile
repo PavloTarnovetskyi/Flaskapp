@@ -40,7 +40,7 @@ pipeline {
                 dir('./terraform'){            
                     sh """
                     terraform init
-                    terraform apply -auto-approve                    
+                    terraform apply -auto-approve -no-color                   
                         """
                 }        
             }

@@ -24,3 +24,7 @@ module "ssh" {
   source = "./ssh"
   ssh = "ssh-key"
 }
+
+output "public_ip" {
+  value =module.ec2ubuntu.ip
+}
