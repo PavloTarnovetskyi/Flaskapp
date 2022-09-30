@@ -1,7 +1,6 @@
 # Task: Build a simple application that gets data from open source API and visualize it by simple page.
 import requests, boto3
 from flask import Flask, render_template, request
-from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
 
