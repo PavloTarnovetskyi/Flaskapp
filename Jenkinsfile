@@ -11,9 +11,12 @@ pipeline {
         registryCredential   = 'dockerhub-creds'
         registry = "pavlotarnovetskyi/flaskapp_jenkins"
     }
+    
+
     stages {
         stage('Cloning our Git '){
             steps{
+                slackSend channel: 'jenkins-messages', message: "The job ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL} has started its work!"
                 git 'https://github.com/PavloTarnovetskyi/Flaskapp.git'
             }
         }
@@ -57,5 +60,14 @@ pipeline {
                 }
             }
         }            
+    }
+
+    post
+    {
+        always
+        {
+            slackSend channel: 'jenkins-messages', message: "Please find status of pipeline ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+        }
+
     }
 }
