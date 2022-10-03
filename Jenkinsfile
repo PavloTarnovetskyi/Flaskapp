@@ -59,7 +59,13 @@ pipeline {
                     }    
                 }
             }
-        }            
+        }
+        stage('Substitute public ip in prometheus.yml & restart prometheus'){
+            steps{
+                sh 'chmod +x ./terraform/script.sh'
+                sh './terraform/script.sh'
+            }            
+        }             
     }
 
     post
