@@ -62,8 +62,10 @@ pipeline {
         stage('Substitute public ip in prometheus.yml & restart prometheus'){
             steps{
                 dir('./terraform'){
-                sh 'chmod +x ./script.sh'
-                sh './script.sh'
+                sh """
+                chmod +x ./script.sh
+                ./script.sh
+                """
                 }
             }            
         }            
