@@ -4,15 +4,13 @@ pipeline {
 
     tools {
         dockerTool 'docker'
-    }
-    
+    }    
     environment{
         dockerImage = ''
         registryCredential   = 'dockerhub-creds'
         registry = "pavlotarnovetskyi/flaskapp_jenkins"
     }
     
-
     stages {
         stage('Cloning our Git '){
             steps{
