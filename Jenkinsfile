@@ -4,7 +4,7 @@ pipeline {
 
     tools {
         dockerTool 'docker'
-    }
+    }    
     
     environment{
         dockerImage = ''
@@ -12,7 +12,6 @@ pipeline {
         registry = "pavlotarnovetskyi/flaskapp_jenkins"
     }
     
-
     stages {
         stage('Cloning our Git '){
             steps{
@@ -62,10 +61,14 @@ pipeline {
         }
         stage('Substitute public ip in prometheus.yml & restart prometheus'){
             steps{
-                sh 'chmod +x ./terraform/script.sh'
-                sh './terraform/script.sh'
+                dir('./terraform'){
+                sh """
+                chmod +x ./script.sh
+                ./script.sh
+                """
+                }
             }            
-        }             
+        }            
     }
 
     post
