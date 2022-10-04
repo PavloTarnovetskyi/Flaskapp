@@ -5,6 +5,7 @@ pipeline {
     tools {
         dockerTool 'docker'
     }    
+    
     environment{
         dockerImage = ''
         registryCredential   = 'dockerhub-creds'
