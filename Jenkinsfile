@@ -4,7 +4,7 @@ pipeline {
 
     tools {
         dockerTool 'docker'
-    }    
+    }
     
     environment{
         dockerImage = ''
@@ -12,6 +12,7 @@ pipeline {
         registry = "pavlotarnovetskyi/flaskapp_jenkins"
     }
     
+
     stages {
         stage('Cloning our Git '){
             steps{
@@ -61,9 +62,16 @@ pipeline {
         }
         stage('Substitute public ip in prometheus.yml & restart prometheus'){
             steps{
-                sh 'chmod +x ./terraform/script.sh'
-                sh './terraform/script.sh'
-            }            
+                dir('./terraform'){
+                    sh '''
+                    #!/bin/bash
+                    Public_IP=`terraform output public_ip | sed \'s/.\\\\(.*\\\\)/\\\\1/\' | sed \'s/\\\\(.*\\\\)./\\\\1/\'`
+                    echo $Public_IP
+                    sed -i -e "s/\'\\(.*\\\\):9100\'/\'$Public_IP:9100\'/g" /usr/local/etc/prometheus.yml
+                    brew services restart prometheus
+                    '''
+                }    
+            }                 
         }             
     }
 
