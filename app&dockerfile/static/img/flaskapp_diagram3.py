@@ -32,7 +32,7 @@ with Diagram('Flaskapp_diagram: 3 step "Server monitoring"', show=True, graph_at
         node_exporter = Custom ("node exporter", "./png/node-exporter.png")
 
       
-    prometheus >> Edge(label="1. takes metrics from EC2 instance")<<node_exporter
+    prometheus >> Edge(label="1. pulls metrics data")<<node_exporter
     prometheus >> Edge(label="2. metrics dashboarding")<<grafana
     devops >> Edge(label="3. take information about instance for monitoring")>>grafana
    
