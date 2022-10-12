@@ -15,7 +15,7 @@
 ## Deploying on localhost:
 ### To run this app on localhost yot have to install and setup necessary tools:
 - Docker
-- git
+- Git
 
 After that run the following commands:
 
