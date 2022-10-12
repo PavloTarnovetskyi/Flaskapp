@@ -5,7 +5,7 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 ssm = boto3.client('ssm', region_name='eu-north-1')
-APP_ID = ssm.get_parameter(Name='APP_ID')['Parameter']['Value']
+APP_ID = ssm.get_parameter(Name='app_id',WithDecryption=True)['Parameter']['Value']
 ENDPOINT = "https://openexchangerates.org/api/latest.json"
 CURRENCY_DEF_ENDPOINT = "https://openexchangerates.org/api/currencies.json"
 exchange_rates = requests.get(f"{ENDPOINT}?app_id={APP_ID}").json()["rates"]
